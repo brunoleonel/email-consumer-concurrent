@@ -3,7 +3,7 @@ package email
 import (
 	"encoding/json"
 
-	"github.com/brunoleonel/email-consumer/model"
+	"github.com/brunoleonel/email-consumer-concurrent/model"
 	"gopkg.in/gomail.v2"
 )
 

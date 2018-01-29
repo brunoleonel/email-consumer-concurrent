@@ -3,7 +3,7 @@ package queue
 import (
 	"log"
 
-	"github.com/brunoleonel/email-consumer/email"
+	"github.com/brunoleonel/email-consumer-concurrent/email"
 	"github.com/streadway/amqp"
 )
 
@@ -26,14 +26,21 @@ func SendEmails() {
 	defer ch.Close()
 
 	q, err := ch.QueueDeclare(
-		"email",
-		false,
+		"email_conc",
+		true,
 		false,
 		false,
 		false,
 		nil,
 	)
 	failOnError(err, "[queue] Falha na criação da fila.")
+
+	err = ch.Qos(
+		1, //prefetch count
+		0, //prefetch size
+		false,
+	)
+	failOnError(err, "[queue] Falha ao setar o Qos")
 
 	msgs, err := ch.Consume(
 		q.Name,
@@ -56,6 +63,7 @@ func SendEmails() {
 
 			err = email.SendEmail(emailObj)
 			failOnError(err, "[queue] Houve uma falha ao enviar o e-mail.")
+			d.Ack(false)
 		}
 	}()
 

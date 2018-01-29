@@ -1,6 +1,6 @@
 package main
 
-import "github.com/brunoleonel/email-consumer/queue"
+import "github.com/brunoleonel/email-consumer-concurrent/queue"
 
 func main() {
 
